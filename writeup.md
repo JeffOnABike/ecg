@@ -97,5 +97,5 @@ Based on the calculation frequency, there will be approximately 17,500 unique cl
 
 The goal of the classification model will be, based on the above scoring and assumptions, to capture a minimum of 48/49 episodes (sensitivity > 98%), while keeping a precision of classification above 95%.
 
-The calculation of the observation window must be additionally considered in algorithm selection, since the algorithm will ultimately be applied to real-time data.
+The calculation time based on of the observation window must be additionally considered in algorithm selection, since the algorithm will ultimately be applied to real-time data. Because the model testing will be performed with varying parameters such as the observation window and the complexity of transformations and engineered features, a scalable computing platform is also required.
 
