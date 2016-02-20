@@ -4,7 +4,7 @@ Jeff Larson - project proposal writeup
 The goal of my project is to efficiently classify episodes of Ventricular Fibrillations (VF) from sample ECG signal recordings originating from 35 test subjects.
 
 The meaning of efficient classification is as follows:
-* With maximum sensitivity (~100%). If there is an episode, it must be classified as positive. Competing technologies advertise a 98% sensitivity benchmark.
+* With maximum sensitivity (~100%). If there is an episode, it nearly always must be classified as positive.
 * With optimal precision (>95%). Classifying an interval of ECG as an episode when there is fact no episode occurring is highly undesirable, but not as important as maintaining maximum sensitivity to true episodes.
 * Classification must be done as quickly as possible. The time window of observations used to classify should be minimized as every second is potentially the last the patient has.
 * Classification algorithms need to be computationally quick and simple, minimizing the additional lag of processing time on top of the window of observation.
@@ -26,13 +26,13 @@ Each contains:
 
 ***Data Processing***<br>
 Problem: many of the sample files have missing ECG data for varying intervals of time. A justified solution needs to be implemented as far as filling the missing data. Possible solutions:
-	- Repeat most recent data as an inference to what is happening during the interruption
-	- Fill values with a constant or a random distribution of readings. Doing so, however, may have unintended effects features including ECG that will be used to classify episodes.
+* Repeat most recent data as an inference to what is happening during the interruption
+* Fill values with a constant or a random distribution of readings. Doing so, however, may have unintended effects features including ECG that will be used to classify episodes.
 
 ### Annotations 
 
 There are 35 corresponding records of annotations. The prefix of the files identify the subject record. Each file has '_show_annotations.csv' suffix, and are on the order of KB.
-In addition to other features, each annotation file contains the pertinent features to:
+In addition to other notations, each annotation file contains the pertinent features:
 * 'Seconds' - Duration from recording start in seconds. 
 	**This corresponds to the ECG sample data**
 * 'Type' observations which are typically N for normal beats and other letters or symbols for aberrations
@@ -40,7 +40,7 @@ In addition to other features, each annotation file contains the pertinent featu
 * 'Aux' - descriptive annotations corresponding to aberrations
 	e.g. '(VF'	
 
-***Data Processing***
+***Data Processing***<br>
 In recasting the data as csvs onto S3, the only modifications were to the annotations file for each, where missing values were filled with "NA"
 
 ### N.B. 
@@ -54,7 +54,7 @@ As features are engineered moving forward, some of the variations/inconsistencie
 # Testing Schema:
 
 ## Methods
-There are 49 distinct episodes of VF according to annotation files.For individual subject records, this varies between 0 for some (patients cu02, cu14), to 1-5 episodes for each of the other 33 subjects.
+There are 49 distinct episodes of VF according to annotation files. For individual subject records, this varies between 0 for some (subjects cu02, cu14), to 1-5 episodes for each of the other 33 subjects.
 
 VT is also recorded and noted, and will be the subject of further work, however it only occurred in one patient (cu02), where it occurred five times.
 
@@ -83,7 +83,8 @@ CRITERIA:
 CRITERIA:
 	(y_hat == 0) & (t_finish < t_vfon + k) 
 
-N.B.: no definition is yet made for how to handle the denoument of a VF episode, where the observation window includes both a section of the VF as well as resumed non-VF ECG activity.
+### N.B.:
+ A strict definition is yet to be made for how to score a classification occurring during the offset of a VF episode, where the observation window includes both a section of the VF as well as resumed non-VF ECG activity.
 
 
 ## Evaluation:
